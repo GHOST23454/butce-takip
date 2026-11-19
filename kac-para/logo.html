@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kaç Para? Logo</title>
+  <style>
+    body {
+      background: #0f1220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .logo {
+      width: 512px;
+      height: 512px;
+      background: linear-gradient(135deg, #6c5ce7, #8b7bff);
+      border-radius: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 60px rgba(108, 92, 231, 0.5);
+    }
+    .logo span {
+      font-size: 280px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      font-family: Arial, sans-serif;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo" id="logo">
+    <span>₺</span>
+  </div>
+
+  <script>
+    // PNG olarak indirme butonu (opsiyonel)
+    document.getElementById('logo').addEventListener('click', () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // Arka plan gradyanı
+      const grad = ctx.createLinearGradient(0, 0, 512, 512);
+      grad.addColorStop(0, '#6c5ce7');
+      grad.addColorStop(1, '#8b7bff');
+      ctx.fillStyle = grad;
+      // Yuvarlatılmış kare
+      roundRect(ctx, 0, 0, 512, 512, 110);
+      ctx.fill();
+
+      // ₺ sembolü
+      ctx.fillStyle = '#fff';
+      ctx.font = '800 280px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('₺', 256, 270);
+
+      // İndir
+      const link = document.createElement('a');
+      link.download = 'icon-512.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+  </script>
+</body>
+</html>
