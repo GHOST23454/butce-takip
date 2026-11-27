@@ -3,8 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kaç Para? — Profesyonel Bütçe Takipçisi</title>
   
+  <!-- SEO ve Kerem Gürgün Bilgileri -->
+  <title>Kerem Gürgün - Kaç Para? | Profesyonel Bütçe Takipçisi</title>
+  <meta name="description" content="Kerem Gürgün tarafından geliştirilen Kaç Para?, gelir ve giderlerinizi takip edebileceğiniz, bütçenizi yönetebileceğiniz ücretsiz ve profesyonel bir bütçe uygulamasıdır." />
+  <meta name="keywords" content="Kerem Gürgün, Kaç Para, bütçe takip, gelir gider, finans uygulaması, para yönetimi" />
+  <meta name="author" content="Kerem Gürgün" />
+  
+  <!-- Open Graph (Sosyal Medya Paylaşımları İçin) -->
+  <meta property="og:title" content="Kerem Gürgün - Kaç Para? | Bütçe Takipçisi" />
+  <meta property="og:description" content="Kerem Gürgün tarafından geliştirilen ücretsiz bütçe ve finans takip uygulaması." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Yapısal Verisi (Google'ın seni tanıması için) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Kaç Para?",
+    "author": {
+      "@type": "Person",
+      "name": "Kerem Gürgün"
+    },
+    "description": "Kerem Gürgün tarafından geliştirilen profesyonel bütçe takip uygulaması."
+  }
+  </script>
+
   <meta name="google-site-verification" content="7JyHRD6K0KmP9sFAeRvvrFaIyyjko7lSBl2RAn9wLT4" />
   <meta name="theme-color" content="#0f1220" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -36,20 +60,17 @@
   </header>
 
   <main class="container">
-    <!-- KURULUM BANNER -->
     <div id="installBanner" class="install-banner hidden">
       <p>📱 Bu uygulamayı telefonuna kurmak ister misin?</p>
       <button type="button" id="installBtn" class="btn btn-primary">Hemen Kur</button>
     </div>
 
-    <!-- AY SEÇİCİ -->
     <div class="month-selector">
       <button id="prevMonthBtn" class="icon-btn" title="Önceki Ay">←</button>
       <span id="currentMonthLabel">Bu Ay</span>
       <button id="nextMonthBtn" class="icon-btn" title="Sonraki Ay">→</button>
     </div>
 
-    <!-- ÖZET KARTLARI (Mobilde 2x2) -->
     <section class="stats">
       <div class="stat-card">
         <span class="stat-label">Gelir</span>
@@ -73,17 +94,12 @@
       </div>
     </section>
 
-    <!-- HIZLI İŞLEM BUTONU -->
     <button id="quickAddBtn" class="btn btn-primary btn-block" style="margin-bottom: 1rem; padding: 0.8rem; font-size: 1rem;">
       ➕ Hızlı İşlem Ekle
     </button>
 
-    <!-- ANA PANEL -->
     <section class="grid">
-      <!-- SOL: İŞLEMLER VE FORM -->
       <div class="panel">
-        
-        <!-- AÇILIR KAPANIR FORM BAŞLANGICI -->
         <button id="toggleFormBtn" class="toggle-form-btn">
           <span>➕ Yeni İşlem Ekle</span>
           <span id="toggleIcon">▼</span>
@@ -119,7 +135,6 @@
             <button type="submit" class="btn btn-primary btn-block" id="submitBtn">+ Kaydet</button>
           </form>
         </div>
-        <!-- AÇILIR KAPANIR FORM BİTİŞİ -->
 
         <div class="list-header">
           <h2 class="panel-title">İşlemler</h2>
@@ -153,7 +168,6 @@
         <p id="emptyState" class="empty">Bu ay için henüz işlem yok.</p>
       </div>
 
-      <!-- SAĞ: GRAFİKLER -->
       <div class="panel">
         <h2 class="panel-title">Kategori Dağılımı</h2>
         <div class="donut-wrap">
@@ -166,7 +180,6 @@
       </div>
     </section>
 
-    <!-- YENİ: BİRİKİM HEDEFLERİ PANELİ -->
     <section class="panel" style="margin-top: 1rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h2 class="panel-title" style="margin: 0;">🎯 Birikim Hedefleri</h2>
@@ -176,7 +189,6 @@
       <p id="emptyGoal" class="empty" style="padding: 1rem 0;">Henüz birikim hedefi yok.</p>
     </section>
 
-    <!-- YENİ: BORÇ / ALACAK PANELİ -->
     <section class="panel" style="margin-top: 1rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h2 class="panel-title" style="margin: 0;">💸 Borç / Alacak</h2>
@@ -189,7 +201,7 @@
   </main>
 
   <footer class="footer">
-    <p>© 2026 Kaç Para? — Tüm hakları saklıdır.</p>
+    <p>© 2026 Kaç Para? — Tüm hakları saklıdır. Geliştirici: <strong>Kerem Gürgün</strong></p>
     <button id="privacyBtn" class="link-btn">Gizlilik Politikası ve Kullanım Şartları</button>
   </footer>
 
@@ -367,7 +379,7 @@
   </div>
 
   <!-- GİZLİLİK MODAL -->
-  <div id="privacyModal" class="modal" hidden>
+  <div id="privacyModal" class="modal" hidden style="display: none;">
     <div class="modal-box" style="width: min(92vw, 600px); max-height: 80vh; overflow-y: auto;">
       <h3>Gizlilik Politikası</h3>
       <p class="modal-desc" style="margin-top: 1rem;">

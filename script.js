@@ -1,5 +1,5 @@
 /* ============================================================
-   Kaç Para? — Profesyonel Bütçe Takipçisi (v19 - Ultimate)
+   Kaç Para? — Profesyonel Bütçe Takipçisi (v20 - Final)
    ============================================================ */
 
 const STORAGE_KEY = 'kacpara.v5'; 
@@ -415,14 +415,12 @@ function downloadCSV() {
 }
 
 function setupEvents() {
-  // Form Aç/Kapa
   $('#toggleFormBtn').addEventListener('click', () => {
     const c = $('#formContainer');
     c.classList.toggle('hidden');
     $('#toggleIcon').textContent = c.classList.contains('hidden') ? '▼' : '▲';
   });
 
-  // Hızlı İşlem Ekle Butonu (Formu açar ve en üste kaydırır)
   $('#quickAddBtn').addEventListener('click', () => {
     const c = $('#formContainer');
     c.classList.remove('hidden');
@@ -431,7 +429,6 @@ function setupEvents() {
     c.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
-  // Ayarlar Modal
   const settingsModal = $('#settingsModal');
   $('#settingsBtn').addEventListener('click', () => { settingsModal.classList.remove('hidden'); settingsModal.hidden = false; });
   $('#settingsClose').addEventListener('click', () => { settingsModal.classList.add('hidden'); settingsModal.hidden = true; });
@@ -575,14 +572,25 @@ function setupEvents() {
     save(); renderAll(); toast('Tüm veriler silindi', 'error'); settingsModal.classList.add('hidden'); settingsModal.hidden = true;
   });
 
-  // Gizlilik (Kapatma sorunu çözüldü - bir daha açılmamak üzere kapatır)
+  // Gizlilik Kapatma (KESİN ÇÖZÜM)
   const privModal = $('#privacyModal');
-  $('#privacyBtn').addEventListener('click', () => { privModal.hidden = false; privModal.classList.remove('hidden'); });
-  $('#privacyClose').addEventListener('click', () => { 
-    privModal.classList.add('hidden'); 
-    privModal.hidden = true; 
-    localStorage.setItem('kacpara_privacy_accepted', 'true'); // Bir daha gösterme
-  });
+  if ($('#privacyBtn')) {
+    $('#privacyBtn').addEventListener('click', (e) => { 
+      e.preventDefault();
+      privModal.style.display = 'flex';
+      privModal.hidden = false; 
+      privModal.classList.remove('hidden'); 
+    });
+  }
+  if ($('#privacyClose')) {
+    $('#privacyClose').addEventListener('click', (e) => { 
+      e.preventDefault();
+      privModal.style.display = 'none'; 
+      privModal.classList.add('hidden'); 
+      privModal.hidden = true; 
+      localStorage.setItem('kacpara_privacy_accepted', 'true'); 
+    });
+  }
 
   // PWA
   let deferredPrompt;
@@ -600,16 +608,20 @@ function init() {
   document.querySelector('.switch-btn[data-type="expense"]').classList.add('active');
   updateFormCategories();
   
-  // Başlangıçta modalları gizle
   ['#settingsModal','#budgetModal','#recurringModal','#limitsModal','#cleanupModal','#goalModal','#debtModal'].forEach(s => { const el = $(s); if(el) { el.classList.add('hidden'); el.hidden = true; } });
   
-  // Gizlilik Politikası Kontrolü
-  if (!localStorage.getItem('kacpara_privacy_accepted')) {
-    $('#privacyModal').hidden = false;
-    $('#privacyModal').classList.remove('hidden');
-  } else {
-    $('#privacyModal').classList.add('hidden');
-    $('#privacyModal').hidden = true;
+  // Gizlilik Politikası Kontrolü (KESİN ÇÖZÜM)
+  const privInit = $('#privacyModal');
+  if (privInit) {
+    if (!localStorage.getItem('kacpara_privacy_accepted')) {
+      privInit.style.display = 'flex';
+      privInit.hidden = false;
+      privInit.classList.remove('hidden');
+    } else {
+      privInit.style.display = 'none';
+      privInit.classList.add('hidden');
+      privInit.hidden = true;
+    }
   }
 
   setupEvents();
