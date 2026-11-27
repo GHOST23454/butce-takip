@@ -1,5 +1,5 @@
 /* ============================================================
-   Kaç Para? — Profesyonel Bütçe Takipçisi (v18 - Modern UI)
+   Kaç Para? — Profesyonel Bütçe Takipçisi (v19 - Ultimate)
    ============================================================ */
 
 const STORAGE_KEY = 'kacpara.v5'; 
@@ -28,6 +28,8 @@ let state = {
   budgets: {},
   recurring: [],
   limits: {},
+  goals: [],
+  debts: [],
   lastProcessedMonth: '',
   theme: 'auto',
   filterType: 'all',
@@ -146,6 +148,43 @@ function renderLimitsList() {
       <div class="expense-info"><span class="expense-note">${cat}</span><span class="expense-meta">Aylık Limit</span></div>
       <span class="expense-amount">${fmt(amount)}</span>
       <button type="button" class="del-limit-btn" data-cat="${cat}">🗑️</button>`;
+    ul.appendChild(li);
+  });
+}
+
+function renderGoalsList() {
+  const ul = $('#goalList'); if (!ul) return; ul.innerHTML = '';
+  if (!state.goals || state.goals.length === 0) { $('#emptyGoal').hidden = false; return; }
+  $('#emptyGoal').hidden = true;
+  state.goals.forEach(goal => {
+    const pct = Math.min((goal.saved / goal.amount) * 100, 100);
+    const li = document.createElement('li'); li.className = 'expense-item'; li.style.flexDirection = 'column'; li.style.alignItems = 'flex-start';
+    li.innerHTML = `
+      <div style="display:flex; justify-content:space-between; width:100%; margin-bottom: 4px;">
+        <span class="expense-note">${escapeHTML(goal.name)}</span>
+        <span class="expense-amount">${fmt(goal.saved)} / ${fmt(goal.amount)}</span>
+      </div>
+      <div class="progress" style="width:100%;"><div class="progress-bar" style="width:${pct}%; background: var(--primary);"></div></div>
+      <div style="display:flex; justify-content:space-between; width:100%; margin-top: 4px;">
+        <span class="expense-meta">%${pct.toFixed(0)} Tamamlandı</span>
+        <button type="button" class="del-btn" data-id="${goal.id}" style="margin-left: auto;">🗑️</button>
+      </div>`;
+    ul.appendChild(li);
+  });
+}
+
+function renderDebtsList() {
+  const ul = $('#debtList'); if (!ul) return; ul.innerHTML = '';
+  if (!state.debts || state.debts.length === 0) { $('#emptyDebt').hidden = false; return; }
+  $('#emptyDebt').hidden = true;
+  state.debts.forEach(debt => {
+    const isBorc = debt.type === 'borc';
+    const li = document.createElement('li'); li.className = 'expense-item';
+    li.innerHTML = `
+      <span class="expense-emoji">${isBorc ? '🔴' : '🟢'}</span>
+      <div class="expense-info"><span class="expense-note">${escapeHTML(debt.name)}</span><span class="expense-meta">${isBorc ? 'Borç' : 'Alacak'}</span></div>
+      <span class="expense-amount ${isBorc ? 'expense' : 'income'}">${fmt(debt.amount)}</span>
+      <button type="button" class="del-btn" data-id="${debt.id}">🗑️</button>`;
     ul.appendChild(li);
   });
 }
@@ -363,7 +402,7 @@ function drawBars() {
   requestAnimationFrame(loop);
 }
 
-function renderAll() { updateMonthDisplay(); renderStats(); renderList(); renderRecurringList(); renderLimitsList(); drawDonut(); drawBars(); }
+function renderAll() { updateMonthDisplay(); renderStats(); renderList(); renderRecurringList(); renderLimitsList(); renderGoalsList(); renderDebtsList(); drawDonut(); drawBars(); }
 
 function downloadCSV() {
   const list = [...monthTransactions()].sort((a, b) => (a.date > b.date ? 1 : -1));
@@ -381,6 +420,15 @@ function setupEvents() {
     const c = $('#formContainer');
     c.classList.toggle('hidden');
     $('#toggleIcon').textContent = c.classList.contains('hidden') ? '▼' : '▲';
+  });
+
+  // Hızlı İşlem Ekle Butonu (Formu açar ve en üste kaydırır)
+  $('#quickAddBtn').addEventListener('click', () => {
+    const c = $('#formContainer');
+    c.classList.remove('hidden');
+    $('#toggleIcon').textContent = '▲';
+    $('#amount').focus();
+    c.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 
   // Ayarlar Modal
@@ -408,7 +456,6 @@ function setupEvents() {
     state.transactions.push({ id: uid(), type: currentType, amount: Math.round(amount*100)/100, category, note, date });
     save(); ev.target.reset(); $('#date').value = todayISO(); selectedDate = new Date(date);
     renderAll(); 
-    // Formu kapat
     $('#formContainer').classList.add('hidden'); $('#toggleIcon').textContent = '▼';
     toast(currentType === 'income' ? 'Gelir eklendi ✓' : 'Gider eklendi ✓');
   });
@@ -467,6 +514,32 @@ function setupEvents() {
     const btn = ev.target.closest('.del-limit-btn'); if (!btn) return; delete state.limits[btn.dataset.cat]; save(); renderLimitsList(); renderAll(); toast('Limit silindi', 'error');
   });
 
+  // YENİ: Hedef Modal İşlemleri
+  $('#addGoalBtn').addEventListener('click', () => { $('#goalModal').hidden = false; $('#goalModal').classList.remove('hidden'); });
+  $('#goalCancel').addEventListener('click', () => { $('#goalModal').classList.add('hidden'); $('#goalModal').hidden = true; });
+  $('#goalSave').addEventListener('click', () => {
+    const name = $('#goalName').value.trim(); const amount = parseFloat($('#goalAmount').value); const saved = parseFloat($('#goalSaved').value) || 0;
+    if (!name || !amount || amount <= 0) return toast('Geçerli bilgi gir.', 'error');
+    state.goals.push({ id: uid(), name, amount, saved }); save(); renderGoalsList(); $('#goalModal').classList.add('hidden'); $('#goalModal').hidden = true;
+    $('#goalName').value = ''; $('#goalAmount').value = ''; $('#goalSaved').value = '0'; toast('Hedef eklendi 🎯');
+  });
+  $('#goalList').addEventListener('click', (ev) => {
+    const btn = ev.target.closest('.del-btn'); if (!btn) return; state.goals = state.goals.filter(g => g.id !== btn.dataset.id); save(); renderGoalsList(); toast('Hedef silindi', 'error');
+  });
+
+  // YENİ: Borç Modal İşlemleri
+  $('#addDebtBtn').addEventListener('click', () => { $('#debtModal').hidden = false; $('#debtModal').classList.remove('hidden'); });
+  $('#debtCancel').addEventListener('click', () => { $('#debtModal').classList.add('hidden'); $('#debtModal').hidden = true; });
+  $('#debtSave').addEventListener('click', () => {
+    const name = $('#debtName').value.trim(); const amount = parseFloat($('#debtAmount').value); const type = $('#debtType').value;
+    if (!name || !amount || amount <= 0) return toast('Geçerli bilgi gir.', 'error');
+    state.debts.push({ id: uid(), name, amount, type }); save(); renderDebtsList(); $('#debtModal').classList.add('hidden'); $('#debtModal').hidden = true;
+    $('#debtName').value = ''; $('#debtAmount').value = ''; toast('Kayıt eklendi ✓');
+  });
+  $('#debtList').addEventListener('click', (ev) => {
+    const btn = ev.target.closest('.del-btn'); if (!btn) return; state.debts = state.debts.filter(d => d.id !== btn.dataset.id); save(); renderDebtsList(); toast('Kayıt silindi', 'error');
+  });
+
   $('#cleanupBtn').addEventListener('click', () => { $('#cleanupModal').hidden = false; $('#cleanupModal').classList.remove('hidden'); settingsModal.classList.add('hidden'); settingsModal.hidden = true; });
   $('#cleanupCancel').addEventListener('click', () => { $('#cleanupModal').classList.add('hidden'); $('#cleanupModal').hidden = true; });
   $('#cleanupConfirm').addEventListener('click', () => {
@@ -498,14 +571,18 @@ function setupEvents() {
   });
   $('#resetBtn').addEventListener('click', () => {
     if (!confirm('Tüm veriler silinecek. Emin misin?')) return;
-    state = { transactions: [], budgets: {}, recurring: [], limits: {}, lastProcessedMonth: '', theme: state.theme, filterType: 'all', filterSort: 'date-desc' };
+    state = { transactions: [], budgets: {}, recurring: [], limits: {}, goals: [], debts: [], lastProcessedMonth: '', theme: state.theme, filterType: 'all', filterSort: 'date-desc' };
     save(); renderAll(); toast('Tüm veriler silindi', 'error'); settingsModal.classList.add('hidden'); settingsModal.hidden = true;
   });
 
-  // Gizlilik
+  // Gizlilik (Kapatma sorunu çözüldü - bir daha açılmamak üzere kapatır)
   const privModal = $('#privacyModal');
   $('#privacyBtn').addEventListener('click', () => { privModal.hidden = false; privModal.classList.remove('hidden'); });
-  $('#privacyClose').addEventListener('click', () => { privModal.classList.add('hidden'); privModal.hidden = true; });
+  $('#privacyClose').addEventListener('click', () => { 
+    privModal.classList.add('hidden'); 
+    privModal.hidden = true; 
+    localStorage.setItem('kacpara_privacy_accepted', 'true'); // Bir daha gösterme
+  });
 
   // PWA
   let deferredPrompt;
@@ -524,7 +601,16 @@ function init() {
   updateFormCategories();
   
   // Başlangıçta modalları gizle
-  ['#settingsModal','#budgetModal','#recurringModal','#limitsModal','#cleanupModal','#privacyModal'].forEach(s => { const el = $(s); if(el) { el.classList.add('hidden'); el.hidden = true; } });
+  ['#settingsModal','#budgetModal','#recurringModal','#limitsModal','#cleanupModal','#goalModal','#debtModal'].forEach(s => { const el = $(s); if(el) { el.classList.add('hidden'); el.hidden = true; } });
+  
+  // Gizlilik Politikası Kontrolü
+  if (!localStorage.getItem('kacpara_privacy_accepted')) {
+    $('#privacyModal').hidden = false;
+    $('#privacyModal').classList.remove('hidden');
+  } else {
+    $('#privacyModal').classList.add('hidden');
+    $('#privacyModal').hidden = true;
+  }
 
   setupEvents();
   renderAll();

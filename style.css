@@ -52,11 +52,6 @@ body {
   0% { opacity: 0; transform: scale(0.95); }
   100% { opacity: 1; transform: scale(1); }
 }
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(231, 76, 60, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
-}
 
 /* ÜST BAR */
 .topbar {
@@ -79,6 +74,7 @@ body {
   border-radius: 10px;
   background: linear-gradient(135deg, var(--primary), var(--primary-2));
   font-weight: 800; font-size: 1.1rem; color: #fff;
+  flex-shrink: 0;
 }
 .brand h1 { font-size: 1.1rem; font-weight: 800; }
 .brand-sub { font-size: .7rem; color: var(--muted); }
@@ -197,7 +193,7 @@ body {
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; width: 100%; }
 .field { display: flex; flex-direction: column; gap: 0.3rem; width: 100%; }
 .field label { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
-.field input, .field select, .search, #budgetInput, #recName, #recAmount, #recDay, #limitAmount {
+.field input, .field select, .search, #budgetInput, #recName, #recAmount, #recDay, #limitAmount, #goalName, #goalAmount, #goalSaved, #debtName, #debtAmount {
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--text);
@@ -265,7 +261,7 @@ body {
   .stat-card { padding: 0.8rem; }
   .stat-value { font-size: 1.1rem; }
   .form-row { grid-template-columns: 1fr; gap: 0.6rem; }
-  .field input, .field select { height: 42px; font-size: 0.9rem; } /* Dokunmatik için biraz daha büyük ama taşmaz */
+  .field input, .field select { height: 42px; font-size: 0.9rem; }
   .panel { padding: 0.8rem; }
   .expense-item { padding: 0.5rem; gap: 0.3rem; }
   .expense-emoji { font-size: 1rem; }

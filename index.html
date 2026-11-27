@@ -73,6 +73,11 @@
       </div>
     </section>
 
+    <!-- HIZLI İŞLEM BUTONU -->
+    <button id="quickAddBtn" class="btn btn-primary btn-block" style="margin-bottom: 1rem; padding: 0.8rem; font-size: 1rem;">
+      ➕ Hızlı İşlem Ekle
+    </button>
+
     <!-- ANA PANEL -->
     <section class="grid">
       <!-- SOL: İŞLEMLER VE FORM -->
@@ -160,6 +165,27 @@
         <canvas id="barChart" width="400" height="180"></canvas>
       </div>
     </section>
+
+    <!-- YENİ: BİRİKİM HEDEFLERİ PANELİ -->
+    <section class="panel" style="margin-top: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="panel-title" style="margin: 0;">🎯 Birikim Hedefleri</h2>
+        <button id="addGoalBtn" class="btn btn-ghost" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">+ Yeni Hedef</button>
+      </div>
+      <ul id="goalList" class="expense-list" style="max-height: 200px;"></ul>
+      <p id="emptyGoal" class="empty" style="padding: 1rem 0;">Henüz birikim hedefi yok.</p>
+    </section>
+
+    <!-- YENİ: BORÇ / ALACAK PANELİ -->
+    <section class="panel" style="margin-top: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="panel-title" style="margin: 0;">💸 Borç / Alacak</h2>
+        <button id="addDebtBtn" class="btn btn-ghost" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">+ Yeni Kayıt</button>
+      </div>
+      <ul id="debtList" class="expense-list" style="max-height: 200px;"></ul>
+      <p id="emptyDebt" class="empty" style="padding: 1rem 0;">Henüz borç/alacak kaydı yok.</p>
+    </section>
+
   </main>
 
   <footer class="footer">
@@ -167,7 +193,7 @@
     <button id="privacyBtn" class="link-btn">Gizlilik Politikası ve Kullanım Şartları</button>
   </footer>
 
-  <!-- AYARLAR MODAL (Eski üst bar butonları burada) -->
+  <!-- AYARLAR MODAL -->
   <div id="settingsModal" class="modal" hidden>
     <div class="modal-box">
       <h3>⚙️ Ayarlar ve Araçlar</h3>
@@ -264,6 +290,57 @@
       <p id="emptyLimits" class="empty" style="padding: 1rem 0;">Henüz limit yok.</p>
       <div class="modal-actions" style="margin-top: 1rem;">
         <button type="button" class="btn btn-ghost btn-block" id="limitsClose">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BİRİKİM HEDEFİ MODAL -->
+  <div id="goalModal" class="modal" hidden>
+    <div class="modal-box">
+      <h3>🎯 Yeni Birikim Hedefi</h3>
+      <p class="modal-desc">Tatil, araba veya acil durum fonu için hedef koy.</p>
+      <div class="field" style="margin-bottom: 0.8rem;">
+        <label>Hedef Adı</label>
+        <input type="text" id="goalName" placeholder="Örn. Tatil" required />
+      </div>
+      <div class="field" style="margin-bottom: 0.8rem;">
+        <label>Hedef Tutar (₺)</label>
+        <input type="number" id="goalAmount" min="1" step="1" placeholder="Örn. 10000" required />
+      </div>
+      <div class="field" style="margin-bottom: 0.8rem;">
+        <label>Biriken Tutar (₺)</label>
+        <input type="number" id="goalSaved" min="0" step="1" value="0" required />
+      </div>
+      <div class="modal-actions" style="margin-top: 1rem;">
+        <button type="button" class="btn btn-ghost" id="goalCancel">İptal</button>
+        <button type="button" class="btn btn-primary" id="goalSave">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BORÇ/ALACAK MODAL -->
+  <div id="debtModal" class="modal" hidden>
+    <div class="modal-box">
+      <h3>💸 Yeni Borç/Alacak Kaydı</h3>
+      <p class="modal-desc">Kime ne kadar borcun var veya kim sana borçlu?</p>
+      <div class="field" style="margin-bottom: 0.8rem;">
+        <label>Kişi / Kurum</label>
+        <input type="text" id="debtName" placeholder="Örn. Ahmet veya Banka" required />
+      </div>
+      <div class="field" style="margin-bottom: 0.8rem;">
+        <label>Tutar (₺)</label>
+        <input type="number" id="debtAmount" min="1" step="1" placeholder="Örn. 500" required />
+      </div>
+      <div class="field" style="margin-bottom: 0.8rem;">
+        <label>Tür</label>
+        <select id="debtType">
+          <option value="borc">Borç (Ben borçluyum)</option>
+          <option value="alacak">Alacak (Ben alacaklıyım)</option>
+        </select>
+      </div>
+      <div class="modal-actions" style="margin-top: 1rem;">
+        <button type="button" class="btn btn-ghost" id="debtCancel">İptal</button>
+        <button type="button" class="btn btn-primary" id="debtSave">Kaydet</button>
       </div>
     </div>
   </div>
