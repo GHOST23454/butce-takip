@@ -10,21 +10,16 @@
   <meta name="keywords" content="Kerem Gürgün, Kaç Para, bütçe takip, gelir gider, finans uygulaması, para yönetimi" />
   <meta name="author" content="Kerem Gürgün" />
   
-  <!-- Open Graph (Sosyal Medya Paylaşımları İçin) -->
   <meta property="og:title" content="Kerem Gürgün - Kaç Para? | Bütçe Takipçisi" />
   <meta property="og:description" content="Kerem Gürgün tarafından geliştirilen ücretsiz bütçe ve finans takip uygulaması." />
   <meta property="og:type" content="website" />
 
-  <!-- Google Yapısal Verisi (Google'ın seni tanıması için) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Kaç Para?",
-    "author": {
-      "@type": "Person",
-      "name": "Kerem Gürgün"
-    },
+    "author": { "@type": "Person", "name": "Kerem Gürgün" },
     "description": "Kerem Gürgün tarafından geliştirilen profesyonel bütçe takip uygulaması."
   }
   </script>
@@ -202,7 +197,6 @@
 
   <footer class="footer">
     <p>© 2026 Kaç Para? — Tüm hakları saklıdır. Geliştirici: <strong>Kerem Gürgün</strong></p>
-    <button id="privacyBtn" class="link-btn">Gizlilik Politikası ve Kullanım Şartları</button>
   </footer>
 
   <!-- AYARLAR MODAL -->
@@ -378,25 +372,7 @@
     </div>
   </div>
 
-  <!-- GİZLİLİK MODAL -->
-  <div id="privacyModal" class="modal" hidden style="display: none;">
-    <div class="modal-box" style="width: min(92vw, 600px); max-height: 80vh; overflow-y: auto;">
-      <h3>Gizlilik Politikası</h3>
-      <p class="modal-desc" style="margin-top: 1rem;">
-        <strong>1. Veri Saklama:</strong> Tüm veriler sadece tarayıcınızda (localStorage) saklanır. Sunucuya gönderilmez.
-      </p>
-      <p class="modal-desc">
-        <strong>2. Veri Kaybı:</strong> Tarayıcı verilerini temizlerseniz bütçe verileriniz de silinir. "JSON Yedek Al" ile yedek almanız önerilir.
-      </p>
-      <p class="modal-desc">
-        <strong>3. Sorumluluk:</strong> Finansal kararlarınızdan doğacak sonuçlardan kullanıcı sorumludur.
-      </p>
-      <div class="modal-actions" style="margin-top: 1rem;">
-        <button type="button" class="btn btn-primary btn-block" id="privacyClose">Anladım</button>
-      </div>
-    </div>
-  </div>
-
+  <!-- PDF RAPOR ŞABLONU -->
   <div id="pdfTemplate" class="pdf-container" hidden>
     <div class="pdf-header">
       <h1>Kaç Para? — Bütçe Raporu</h1>

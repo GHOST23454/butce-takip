@@ -1,5 +1,5 @@
 /* ============================================================
-   Kaç Para? — Profesyonel Bütçe Takipçisi (v20 - Final)
+   Kaç Para? — Profesyonel Bütçe Takipçisi (v21 - Tertemiz)
    ============================================================ */
 
 const STORAGE_KEY = 'kacpara.v5'; 
@@ -572,26 +572,6 @@ function setupEvents() {
     save(); renderAll(); toast('Tüm veriler silindi', 'error'); settingsModal.classList.add('hidden'); settingsModal.hidden = true;
   });
 
-  // Gizlilik Kapatma (KESİN ÇÖZÜM)
-  const privModal = $('#privacyModal');
-  if ($('#privacyBtn')) {
-    $('#privacyBtn').addEventListener('click', (e) => { 
-      e.preventDefault();
-      privModal.style.display = 'flex';
-      privModal.hidden = false; 
-      privModal.classList.remove('hidden'); 
-    });
-  }
-  if ($('#privacyClose')) {
-    $('#privacyClose').addEventListener('click', (e) => { 
-      e.preventDefault();
-      privModal.style.display = 'none'; 
-      privModal.classList.add('hidden'); 
-      privModal.hidden = true; 
-      localStorage.setItem('kacpara_privacy_accepted', 'true'); 
-    });
-  }
-
   // PWA
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; $('#installBanner').classList.remove('hidden'); });
@@ -609,20 +589,6 @@ function init() {
   updateFormCategories();
   
   ['#settingsModal','#budgetModal','#recurringModal','#limitsModal','#cleanupModal','#goalModal','#debtModal'].forEach(s => { const el = $(s); if(el) { el.classList.add('hidden'); el.hidden = true; } });
-  
-  // Gizlilik Politikası Kontrolü (KESİN ÇÖZÜM)
-  const privInit = $('#privacyModal');
-  if (privInit) {
-    if (!localStorage.getItem('kacpara_privacy_accepted')) {
-      privInit.style.display = 'flex';
-      privInit.hidden = false;
-      privInit.classList.remove('hidden');
-    } else {
-      privInit.style.display = 'none';
-      privInit.classList.add('hidden');
-      privInit.hidden = true;
-    }
-  }
 
   setupEvents();
   renderAll();
